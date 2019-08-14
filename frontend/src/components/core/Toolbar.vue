@@ -181,6 +181,8 @@ export default {
           href: '#',
           title: 'Войти',
           click: (e) => {
+            const vm = this;
+            vm.$router.push({ name: 'Login' });
           }
         },
         {
@@ -206,7 +208,7 @@ export default {
           title: 'Выход',
           click: () => {
             const vm = this;
-
+            vm.$store.dispatch('logout');
             vm.$router.push({ name: 'Login' });
           }
         }

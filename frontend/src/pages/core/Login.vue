@@ -67,7 +67,7 @@ export default {
   },
 
   methods: {
-    login() {
+    async login() {
       const vm = this;
 
       if (!vm.userEmail || !vm.password) {
@@ -78,14 +78,35 @@ export default {
         return;
       }
 
-      if (vm.userEmail === vm.$root.userEmail && vm.password === vm.$root.userPassword) {
+      try {
+        const vm = this;
+        let email = vm.userEmail;
+        let password = vm.password;
+        await console.log(email, password);
+        let response = await vm.$store.dispatch('login', {
+          email: email,
+          password: password
+        });
+      } catch (error) {
+        await console.log('Error');
+        await console.error(error);
+        vm.error = true;
+        vm.result = error;
+        //vm.result = "Email or Password is incorrect.";
+        vm.showResult = true;
+        return;
+      }
+
+      await this.$router.push({name: 'Dashboard'});
+
+      /*if (vm.userEmail === vm.$root.userEmail && vm.password === vm.$root.userPassword) {
         vm.$router.push({ name: 'Dashboard' });
       }
       else {
         vm.error = true;
         vm.result = "Email or Password is incorrect.";
         vm.showResult = true;
-      }
+      }*/
     }
   }
 }

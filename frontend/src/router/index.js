@@ -145,5 +145,6 @@ export default new Router({
         allowAnonymous: true
       }
     },
-  ]
+  ],
+  mode: 'history'
 });
