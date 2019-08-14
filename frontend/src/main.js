@@ -12,22 +12,22 @@ import Vuetify from 'vuetify';
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import './styles/global.css';
 
-//import axios from 'axios'
-//import VueAxios from 'vue-axios'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
-//Vue.use(VueAxios, axios);
+Vue.use(VueAxios, axios);
 
-//import VueChartkick from 'vue-chartkick';
-//import Chart from 'chart.js';
+import VueChartkick from 'vue-chartkick';
+import Chart from 'chart.js';
 import fullCalendar from 'vue-fullcalendar';
 import { setupComponents } from './config/setup-components';
 
-//import swatches from 'vue-swatches';
-//import "vue-swatches/dist/vue-swatches.min.css"
+import swatches from 'vue-swatches';
+import "vue-swatches/dist/vue-swatches.min.css"
 
-//Vue.use(VueChartkick, { adapter: Chart });
+Vue.use(VueChartkick, { adapter: Chart });
 Vue.component('full-calendar', fullCalendar);
-//Vue.component('swatches', swatches);
+Vue.component('swatches', swatches);
 
 setupComponents(Vue);
 

@@ -145,17 +145,17 @@
     },
 
     methods: {
-//      initialize () {
-//       this.clients = [
-//         {
-//            name: 'ФОП Пупкин',
-//            egrpou: '1236547890',
-//            address: 'м.Киев',
-//            phone: '+380507777777',
-//            email: '1@2.3',
-//          },
-//        ]
-//      },
+      initialize () {
+       this.clients = [
+         {
+            name: 'ФОП Пупкин',
+            egrpou: '1236547890',
+            address: 'м.Киев',
+            phone: '+380507777777',
+            email: '1@2.3',
+         },
+        ]
+      },
 
       editItem (item) {
         this.editedIndex = this.clients.indexOf(item)

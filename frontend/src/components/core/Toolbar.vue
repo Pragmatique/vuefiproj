@@ -9,6 +9,89 @@
     </v-toolbar-title>
 
     <v-spacer></v-spacer>
+
+    <v-dialog
+      v-model="dialogSettings"
+      width="700">
+      <v-card>
+        <v-card-title class="headline"
+          primary-title>
+          Settings
+        </v-card-title>
+
+        <v-card-text>
+          Choose theme color ?
+          <swatches v-model="$root.themeColor" inline colors="material-dark" :exceptions="['#FFFFFF']" shapes="circles" show-border></swatches>
+        </v-card-text>
+
+        <v-card-text>
+          Set Up System User
+          <v-form>
+            <v-container>
+              <v-layout row wrap>
+
+                <v-flex xs12 xs6 md11>
+                  <v-text-field
+                    v-model="userEmail"
+                    label="User Email"
+                    hint="Set user email"/>
+                </v-flex>
+
+                <v-flex xs12 xs6 md1 />
+
+                <v-flex xs12 sm6 md11>
+                  <v-text-field
+                    v-model="password"
+                    :append-icon="showPassword ? 'visibility_off' : 'visibility'"
+                    :type="showPassword ? 'text' : 'password'"
+                    label="New Password"
+                    hint="Please choose a complex one.."
+                    :error="error"
+                    @click:append="showPassword = !showPassword" />
+                </v-flex>
+
+                <v-flex xs12 sm6 md1 />
+
+                <v-flex xs12 sm6 md11>
+                  <v-text-field
+                    v-model="passwordConfirm"
+                    :append-icon="showPasswordConfirm ? 'visibility_off' : 'visibility'"
+                    :type="showPasswordConfirm ? 'text' : 'password'"
+                    label="Confirm New Password"
+                    hint="and confirm it."
+                    :error="error"
+                    @click:append="showPasswordConfirm = !showPasswordConfirm" />
+                </v-flex>
+
+                <v-flex xs12 sm6 md1 />
+
+                <v-flex xs12 xs6 md11>
+                  <v-switch
+                    label="Email Notification"
+                    color="success"
+                    v-model="switchEmailNotification" />
+                </v-flex>
+
+                <v-flex xs12 xs6 md1 />
+
+              </v-layout>
+            </v-container>
+          </v-form>
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            flat
+            @click="setUpSettings">
+            Save Changes
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     
     <v-menu offset-y offset-x :nudge-bottom="10" transition="scale-transition">
 
@@ -93,6 +176,13 @@ export default {
       showResult: false,
       result: '',
       items: [
+        {
+          icon: 'fingerprint',
+          href: '#',
+          title: 'Войти',
+          click: (e) => {
+          }
+        },
         {
           icon: 'account_circle',
           href: '#',
