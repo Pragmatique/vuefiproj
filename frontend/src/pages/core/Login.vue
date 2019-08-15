@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   data() {
     return {
@@ -65,48 +67,38 @@ export default {
       }
     }
   },
+  computed: {
+      ...mapState('authuser', ['loginErrorMsg'])
+  },
 
   methods: {
     async login() {
-      const vm = this;
 
-      if (!vm.userEmail || !vm.password) {
+      if (!this.userEmail || !this.password) {
 
-        vm.result = "Email and Password can't be null.";
-        vm.showResult = true;
+        this.result = "Email and Password can't be null.";
+        this.showResult = true;
 
         return;
       }
 
-      try {
-        const vm = this;
-        let email = vm.userEmail;
-        let password = vm.password;
-        await console.log(email, password);
-        let response = await vm.$store.dispatch('login', {
-          email: email,
-          password: password
-        });
-      } catch (error) {
-        await console.log('Error');
-        await console.error(error);
-        vm.error = true;
-        vm.result = error;
-        //vm.result = "Email or Password is incorrect.";
-        vm.showResult = true;
-        return;
-      }
+      let email = this.userEmail;
+      let password = this.password;
+      console.log(email, password);
+      await this.$store.dispatch('authuser/login', {
+        email: email,
+        password: password
+      }, {root:true});
 
-      await this.$router.push({name: 'Dashboard'});
-
-      /*if (vm.userEmail === vm.$root.userEmail && vm.password === vm.$root.userPassword) {
-        vm.$router.push({ name: 'Dashboard' });
+      if (this.loginErrorMsg === null) {
+        await this.$router.push({name: 'Dashboard'});
       }
       else {
-        vm.error = true;
-        vm.result = "Email or Password is incorrect.";
-        vm.showResult = true;
-      }*/
+        this.error = true;
+        //this.result = "Email or Password is incorrect.";
+        this.result = this.loginErrorMsg;
+        this.showResult = true;
+      }
     }
   }
 }

@@ -208,7 +208,7 @@ export default {
           title: 'Выход',
           click: () => {
             const vm = this;
-            vm.$store.dispatch('logout');
+            vm.$store.dispatch('authuser/logout',null,{root:true});
             vm.$router.push({ name: 'Login' });
           }
         }
