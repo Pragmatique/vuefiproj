@@ -2,7 +2,7 @@
   <v-toolbar
     dark
     app
-    :color="$root.themeColor">
+    :color="colorForTheme">
     <v-toolbar-title>
       <v-toolbar-side-icon @click="toggleNavigationBar"></v-toolbar-side-icon>
       {{ $root.firstNameCompany }}
@@ -13,28 +13,28 @@
     <v-dialog
       v-model="dialogSettings"
       width="700">
-      <v-card>
-        <v-card-title class="headline"
+      <v-card >
+        <v-card-title class="headling"
           primary-title>
-          Settings
+          Настройки
         </v-card-title>
 
         <v-card-text>
-          Choose theme color ?
-          <swatches v-model="$root.themeColor" inline colors="material-dark" :exceptions="['#FFFFFF']" shapes="circles" show-border></swatches>
+          Хотите выбрать цвет панели?
+          <swatches v-model="colorForTheme"
+            inline colors="material-dark" :exceptions="['#FFFFFF']" shapes="circles" show-border>
+          </swatches>
         </v-card-text>
-
         <v-card-text>
-          Set Up System User
+          Настройки Пользователя
           <v-form>
             <v-container>
               <v-layout row wrap>
-
                 <v-flex xs12 xs6 md11>
                   <v-text-field
                     v-model="userEmail"
-                    label="User Email"
-                    hint="Set user email"/>
+                    label="Email"
+                    hint="Email пользователя нельзя менять"/>
                 </v-flex>
 
                 <v-flex xs12 xs6 md1 />
@@ -44,8 +44,8 @@
                     v-model="password"
                     :append-icon="showPassword ? 'visibility_off' : 'visibility'"
                     :type="showPassword ? 'text' : 'password'"
-                    label="New Password"
-                    hint="Please choose a complex one.."
+                    label="Новый пароль"
+                    hint="Укажите более сложный пароль.."
                     :error="error"
                     @click:append="showPassword = !showPassword" />
                 </v-flex>
@@ -57,43 +57,37 @@
                     v-model="passwordConfirm"
                     :append-icon="showPasswordConfirm ? 'visibility_off' : 'visibility'"
                     :type="showPasswordConfirm ? 'text' : 'password'"
-                    label="Confirm New Password"
-                    hint="and confirm it."
+                    label="Повторите новый пароль"
+                    hint="и подтвердите его.."
                     :error="error"
                     @click:append="showPasswordConfirm = !showPasswordConfirm" />
                 </v-flex>
-
-                <v-flex xs12 sm6 md1 />
-
-                <v-flex xs12 xs6 md11>
-                  <v-switch
-                    label="Email Notification"
-                    color="success"
-                    v-model="switchEmailNotification" />
-                </v-flex>
-
-                <v-flex xs12 xs6 md1 />
-
               </v-layout>
             </v-container>
           </v-form>
         </v-card-text>
-
         <v-divider></v-divider>
-
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
             flat
             @click="setUpSettings">
-            Save Changes
+            Изменить пароль
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-snackbar
+      v-model="showResult"
+      :color= "snackbarColor"
+      :timeout="2000"
+      top>
+      {{ result }}
+    </v-snackbar>
     
-    <v-menu offset-y offset-x :nudge-bottom="10" transition="scale-transition">
+    <v-menu offset-y offset-x :nudge-bottom="10" :color="colorForTheme" transition="scale-transition">
 
       <v-btn icon flat slot="activator" @click="notifications.map(x => x.isActive = false)">
         <v-badge color="blue" overlap>
@@ -134,11 +128,20 @@
 
     <v-menu offset-y offset-x :nudge-bottom="10" transition="scale-transition">
       <v-btn icon large flat slot="activator" :ripple="false">
-        <v-icon large>account_circle</v-icon>
+        <v-avatar v-if="userData.profile.photo">
+          <img
+            :src="userData.profile.photo"
+            :alt="userData.first_name"
+          >
+        </v-avatar>
+        <v-avatar v-else>
+          <v-icon large>account_circle</v-icon>
+        </v-avatar>
       </v-btn>
-      <v-list>
+      <v-list >
         <v-list-tile
           v-for="(item,index) in items"
+          color = "black"
           :key="index"
           :to="!item.href ? { name: item.name } : null"
           :href="item.href"
@@ -159,10 +162,14 @@
   </v-toolbar>
 </template>
 <script>
-
+import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
   data() {
     return {
+      colorForTheme: this.$store.state.authuser.themeColor,
+      //userData: this.$store.state.authuser.userFull,
+      snackbarColor: 'error',
       rating: null,
       dialog: false,
       dialogSettings: false,
@@ -178,7 +185,7 @@ export default {
       items: [
         {
           icon: 'fingerprint',
-          href: '#',
+          //href: '#',
           title: 'Войти',
           click: (e) => {
             const vm = this;
@@ -187,14 +194,14 @@ export default {
         },
         {
           icon: 'account_circle',
-          href: '#',
+          //href: '#',
           title: 'Профиль',
           click: (e) => {
           }
         },
         {
           icon: 'settings',
-          href: '#',
+          //href: '#',
           title: 'Настройки',
           click: () => {
             const vm = this;
@@ -204,7 +211,7 @@ export default {
         },
         {
           icon: 'exit_to_app',
-          href: '#',
+          //href: '#',
           title: 'Выход',
           click: () => {
             const vm = this;
@@ -252,40 +259,76 @@ export default {
     }
   },
 
+  computed: {
+      ...mapGetters('authuser', ['userFull']),
+      ...mapState('authuser', ['user','passwordChangeSuccess']),
+      userData() {return this.$store.state.authuser.userFull}
+      /*,
+      ...mapGetters('authuser', ['userFull'])*/
+      /*colorForTheme: {
+        get: ()=> {debugger; return this.$store.dispatch('authuser/themeColor',null, {root:true})},
+        set: async (newValue)=> {await this.$store.dispatch('authuser/setThemeColor', newValue , {root:true})}
+      }*/
+  },
+  watch: {
+    colorForTheme: function (val, oldVal) {
+      this.$store.dispatch('authuser/setThemeColor', val , {root:true})
+    }
+  },
+
   methods: {
     toggleNavigationBar() {
       const vm = this;
       vm.$emit('toggleNavigationBar');
     },
 
-    setUpSettings() {
+    async setUpSettings() {
       const vm = this;
 
       if (vm.userEmail === null || vm.password === null || vm.passwordConfirm === null) {
 
-        vm.result = "Email and Password can't be null.";
+        vm.result = "Email и Пароль не могут быть пустыми";
         vm.showResult = true;
-
         return;
       }
 
       if (vm.password !== vm.passwordConfirm) {
 
         vm.error = true;
-        vm.result = "Passwords does not match the confirm password.";
+        vm.result = "Пароли должны совпадать...";
         vm.showResult = true;
-
         return;
       }
 
       vm.$root.userEmail = vm.userEmail;
       vm.$root.userPassword = vm.password;
+      await this.$store.dispatch('authuser/changePassword', {
+        userId: this.user.pk,
+        changeData: {password: vm.password}
+      }, {root:true});
 
-      vm.result = "Email and password changed succesfully.";
-      vm.showResult = true;
-
-      vm.dialogSettings = false;
+      if (this.passwordChangeSuccess) {
+        vm.result = "Пароль был успешно изменен";
+        vm.showResult = true;
+        vm.dialogSettings = false;
+      } else {
+        vm.error = true;
+        vm.result = "Не удалось изменить пароль";
+        vm.showResult = true;
+      }
     }
+  },
+  beforeMount () {
+    //this.themeColor = this.$store.state.authuser.themeColor
+    this.$store.dispatch('authuser/getCurrentUser',null,{root:true})
+    console.log(this.$store.state.authuser.userFull)
+    //this.userData = this.$store.state.authuser.userFull
+    //console.log(this.$store.state.authuser.userFull)
+    //await setTimeout(console.log(this.$store.state.authuser.userFull), 1000)
+    //setTimeout(console.log(this.userFull), 2000)
+  },
+  mounted() {
+    console.log(this.userFull)
   }
 };
 </script>

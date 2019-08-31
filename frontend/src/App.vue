@@ -3,7 +3,7 @@
     <template v-if="!$route.meta.allowAnonymous">
       <v-app id="inspire">
         <div class="app-container">
-          <toolbar @toggleNavigationBar="drawer = !drawer"/>
+          <toolbar :key="$route.params.userId" @toggleNavigationBar="drawer = !drawer"/>
           <navigation :toggle="drawer"/>
           <v-content>
             <breadcrumbs />
@@ -30,6 +30,7 @@ export default {
       drawer: true
     }
   }
+
 }
 </script>
 

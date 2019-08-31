@@ -13,6 +13,14 @@ import Error from '../pages/core/Error.vue';
 import TimeLine from '../components/TimeLine.vue';
 import ClientTable from '../components/clienttable.vue';
 import ProjectTable from '../components/projecttable.vue';
+import EditProject from '../components/project/EditProject.vue';
+import ProjectBasic from '../components/project/tabs/ProjectBasic.vue';
+import ProjectClient from '../components/project/tabs/ProjectClient.vue';
+import ProjectContract from '../components/project/tabs/ProjectContract.vue';
+import ProjectFormular from '../components/project/tabs/ProjectFormular.vue';
+import ProjectMounting from '../components/project/tabs/ProjectMounting.vue';
+import ProjectObject from '../components/project/tabs/ProjectObject.vue';
+import ProjectPayment from '../components/project/tabs/ProjectPayment.vue';
 
 
 
@@ -145,6 +153,54 @@ export default new Router({
         allowAnonymous: true
       }
     },
+    {
+      path: '/edit-project',
+      name: 'EditProject',
+      component: EditProject,
+      meta: {
+        breadcrumb: [
+          { name: 'Dashboard', href: 'Dashboard' },
+          { name: 'EditProject' }
+        ]
+      },
+      children: [
+        {
+          path: 'basic',
+          name: 'ProjectBasic',
+          component: ProjectBasic
+        },
+        {
+          path: 'client',
+          name: 'ProjectClient',
+          component: ProjectClient
+        },
+        {
+          path: 'contract',
+          name: 'ProjectContract',
+          component: ProjectContract
+        },
+        {
+          path: 'formular',
+          name: 'ProjectFormular',
+          component: ProjectFormular
+        },
+        {
+          path: 'mounting',
+          name: 'ProjectMounting',
+          component: ProjectMounting
+        },
+        {
+          path: 'object',
+          name: 'ProjectObject',
+          component: ProjectObject
+        },
+        {
+          path: 'payment',
+          name: 'ProjectPayment',
+          component: ProjectPayment
+        }
+      ]
+    }
   ],
   mode: 'history'
 });

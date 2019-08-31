@@ -26,6 +26,8 @@ import { setupComponents } from './config/setup-components';
 import swatches from 'vue-swatches';
 import "vue-swatches/dist/vue-swatches.min.css"
 
+import { mapGetters } from 'vuex';
+
 Vue.use(VueChartkick, { adapter: Chart });
 Vue.component('full-calendar', fullCalendar);
 Vue.component('swatches', swatches);
@@ -43,8 +45,11 @@ new Vue({
   store,
   components: { App },
   template: '<App/>',
+  computed: {
+      ...mapGetters('authuser', ['themeColor'])
+  },
   data: {
-    themeColor: 'indigo' ,//'#1D2939',
+    //themeColor: this.$store.state.authuser.themeColor ,//'#1D2939',
     userEmail: 'admin@gmail.com',
     userPassword: '123456',
     firstNameCompany: 'TOTAL SECURITY',

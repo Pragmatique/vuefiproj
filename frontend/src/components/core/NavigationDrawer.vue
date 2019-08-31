@@ -3,7 +3,7 @@
     v-model="toggle"
     fixed app>
 
-    <v-toolbar flat dark :color="$root.themeColor" class="toolbar">
+    <v-toolbar flat dark :color="themeColor" class="toolbar">
       <router-link :to="{ name: 'Dashboard' }">
       </router-link>
       <router-link :to="{ name: 'Dashboard' }" class="text">
@@ -37,12 +37,24 @@
         </v-list-tile>
       </v-list-group>
       
-      <v-list-tile @click="changeRoute('ProjectTable', 5)">
-        <v-list-tile-action>
-          <v-icon>inbox</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-title :class="[{'active': selectedIndex === 5}, 'item-title' ]">Проекты</v-list-tile-title>
-      </v-list-tile>
+      <v-list-group
+        prepend-icon="select_all">
+        <v-list-tile slot="activator">
+          <v-list-tile-title class="item-title">Проекты</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile @click="changeRoute('EditProject', 5)">
+          <v-list-tile-action>
+            <v-icon>inbox</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title :class="[{'active': selectedIndex === 5}, 'item-title' ]">Новый</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile @click="changeRoute('ProjectTable', 10)">
+          <v-list-tile-action>
+            <v-icon>inbox</v-icon>
+          </v-list-tile-action>
+        <v-list-tile-title :class="[{'active': selectedIndex === 10}, 'item-title' ]">Список проектов</v-list-tile-title>
+        </v-list-tile>
+      </v-list-group>
 
       <v-list-group
         prepend-icon="select_all">
@@ -82,6 +94,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
   props: {
     toggle: {
@@ -99,6 +113,15 @@ export default {
         ['Settings', 'settings']
       ]
     }
+  },
+
+  computed: {
+      /*...mapState('authuser', ['colorForTheme']),*/
+      ...mapGetters('authuser', ['themeColor'])
+      /*colorForTheme: {
+        get: ()=> {debugger; return this.$store.dispatch('authuser/themeColor',null, {root:true})},
+        set: async (newValue)=> {await this.$store.dispatch('authuser/setThemeColor', newValue , {root:true})}
+      }*/
   },
 
   methods: {
