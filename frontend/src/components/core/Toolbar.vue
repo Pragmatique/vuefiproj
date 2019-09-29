@@ -128,7 +128,7 @@
 
     <v-menu offset-y offset-x :nudge-bottom="10" transition="scale-transition">
       <v-btn icon large flat slot="activator" :ripple="false">
-        <v-avatar v-if="userData.profile.photo">
+        <v-avatar v-if="userData && userData.profile.photo">
           <img
             :src="userData.profile.photo"
             :alt="userData.first_name"
@@ -322,13 +322,6 @@ export default {
     //this.themeColor = this.$store.state.authuser.themeColor
     this.$store.dispatch('authuser/getCurrentUser',null,{root:true})
     console.log(this.$store.state.authuser.userFull)
-    //this.userData = this.$store.state.authuser.userFull
-    //console.log(this.$store.state.authuser.userFull)
-    //await setTimeout(console.log(this.$store.state.authuser.userFull), 1000)
-    //setTimeout(console.log(this.userFull), 2000)
-  },
-  mounted() {
-    console.log(this.userFull)
   }
 };
 </script>

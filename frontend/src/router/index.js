@@ -22,6 +22,8 @@ import ProjectMounting from '../components/project/tabs/ProjectMounting.vue';
 import ProjectObject from '../components/project/tabs/ProjectObject.vue';
 import ProjectPayment from '../components/project/tabs/ProjectPayment.vue';
 
+import ProjectStatus from '../components/dictionary/ProjectStatus.vue';
+
 
 
 Vue.use(Router);
@@ -134,6 +136,17 @@ export default new Router({
         breadcrumb: [
           { name: 'Dashboard', href: 'Dashboard' },
           { name: 'Chart' }
+        ]
+      }
+    },
+    {
+      path: '/project-status',
+      name: 'ProjectStatus',
+      component: ProjectStatus,
+      meta: {
+        breadcrumb: [
+          { name: 'Dashboard', href: 'Dashboard' },
+          { name: 'ProjectStatus' }
         ]
       }
     },

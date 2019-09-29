@@ -67,7 +67,7 @@
           </v-list-tile-action>
           <v-list-tile-title :class="[{'active': selectedIndex === 6}, 'item-title' ]">Типы задач</v-list-tile-title>
         </v-list-tile>
-        <v-list-tile @click="changeRoute('Snackbar', 7)">
+        <v-list-tile @click="changeRoute('ProjectStatus', 7)">
           <v-list-tile-action>
             <v-icon>event_note</v-icon>
           </v-list-tile-action>
