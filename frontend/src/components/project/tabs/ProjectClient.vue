@@ -13,37 +13,29 @@
             </v-flex>
 
             <v-flex md8>
-              <v-dialog
-                v-model="modal"
-                :return-value.sync="client_name"
-                :close-on-content-click="true"
-                transition="scale-transition"
-                persistent
-                full-width
-                width="500px"   
-              >
-                <template slot="activator">
-                  <v-text-field
-                    v-model="client_name"
-                    label="Клиент"
-                    prepend-icon="mdi-account-multiple-plus"
-                    readonly
-                    @ret='onRet'
-                  ></v-text-field>
-                </template>
-
-                <template>
-                  <client-list @ret="onRet"></client-list>
-                </template>
-              </v-dialog>
+              <v-autocomplete
+                v-model="model"
+                :items="items"
+                :loading="isLoading"
+                :search-input.sync="search"
+                color="white"
+                hide-no-data
+                hide-selected
+                item-text="name"
+                item-value="item"
+                label="Клиент"
+                placeholder="Выберите клиента"
+                prepend-icon="mdi-database-search"
+                return-object
+              ></v-autocomplete>
             </v-flex>
           </v-layout>
 
           <v-layout row justify-space-between>
             <v-flex md3>
               <v-text-field
-                v-model="egrpou"
-                :rules="[rules.required, rules.digit, rules.length(8)]"
+                v-model="model.egrpou"
+                :rules="[rules.required, rules.digit, rules.length(10)]"
                 clearable
                 clearable-icon
                 filled
@@ -69,8 +61,8 @@
           <v-layout row justify-space-between>
             <v-flex md2>
               <v-text-field
-                v-model="phone"
-                :rules="[rules.required, rules.phone, rules.length(10)]"
+                v-model="model.phone"
+                :rules="[rules.required, rules.phone]"
                 clearable
                 clearable-icon
                 filled
@@ -82,7 +74,7 @@
 
             <v-flex md2>
               <v-text-field
-                v-model="email"
+                v-model="model.email"
                 :rules="[rules.email]"
                 filled
                 clearable
@@ -95,7 +87,7 @@
 
             <v-flex md6>
               <v-text-field
-                v-model="address"
+                v-model="model.address"
                 :rules="[rules.required]"
                 filled
                 clearable
@@ -150,49 +142,122 @@ export default {
       clear_client() {
         const vm = this;
         vm.client_type= vm.client_type_items[0];
-        vm.client_name= undefined;
-        vm.egrpou= undefined;
-        vm.contact= undefined;
-        vm.phone= undefined;
-        vm.email= undefined;
-        vm.address= undefined;
+        vm.client_name= null;
+        vm.egrpou= null;
+        vm.contact= null;
+        vm.phone= null;
+        vm.email= null;
+        vm.address= null;
       },
       save_client() {
         alert('Данные сохранены...');
       },
 
-      onRet(data){
-        client_name = data.name;
-        dialog_client_list= data.dialog_client_list;
+      onRet(e){
+        this.client_name = e.name;
+        this.dialog_client_list= e.dialog_client_list;
+        console.log(this.client_name);
+        console.log(this.dialog_client_list);
       },
 
+    },
+
+    computed: {
+      fields () {
+        if (!this.model) return []
+
+        return Object.keys(this.model).map(key => {
+          return {
+            key,
+            value: this.model[key] || 'n/a',
+          }
+        })
+      },
+      items () {
+        return this.clients.map((item) => {
+          const short_name = item.name.length > this.descriptionLimit
+            ? item.name.slice(0, this.descriptionLimit) + '...'
+            : item.name
+
+          return Object.assign({}, item, { short_name })
+        })
+      },
+      client_object: {
+        get: () => {
+          if (this.model == null) {
+            return {
+              name: '',
+              egrpou: '',
+              address: '',
+              phone: '',
+              email: ''
+            }
+          };
+          return this.model;
+        },
+        set: (newVal) => {
+          this.model = newVal;
+          debugger;
+        }
+      }
     },
 
     data() {
       return {
         client_type: 'Не определен',
         client_type_items: ['Не определен', 'Юридическое лицо', 'Физическое лицо', 'Частный предприниматель'],
-        client_name: undefined,
-        egrpou: undefined,
-        contact: undefined,
-        phone: undefined,
-        email: undefined,
-        address:undefined,
+        client_name: null,
+        egrpou: null,
+        contact: null,
+        phone: null,
+        email: null,
+        address:null,
         tabs:null,
         modal:false,
         dialog_client_list:false,
+        descriptionLimit: 60,
+        entries: [],
+        isLoading: false,
+        model:  {
+          name: '',
+          egrpou: '',
+          address: '',
+          phone: '',
+          email: ''
+        },
+        search: null,
 
         rules: {
-                email: v => (v || '').match(/@/) || 'Введите корректный email',
-                length: len => v => (v || '').length >= len || `Минимальное количество цифр ${len}`,
-                //egrpou: v => (v || '').match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/) ||
-                digit: v => (v || '').match(/(?<=^| )\d+(\.\d+)?(?=$| )/) ||'Поле должно содержать только цифры',
-                phone: v => (v || '').match(/(\s*)?(\+)?([- _():=+]?\d[- ():=+]?){10,14}(\s*)?/) ||'Формат номера +38(0XX)XXX-XX-XX',
-
-                required: v => !!v || 'Поле, обязательное для заполнения',
+          email: v => (v || '').match(/@/) || 'Введите корректный email',
+          length: len => v => (v || '').length >= len || `Минимальное количество цифр ${len}`,
+          //egrpou: v => (v || '').match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/) ||
+          digit: v => (v || '').match(/(?<=^| )\d+(\.\d+)?(?=$| )/) ||'Поле должно содержать только цифры',
+          phone: v => (v || '').match(/(\s*)?(\+)?([- _():=+]?\d[- ():=+]?){10,14}(\s*)?/) ||'Формат номера +38(0XX)XXX-XX-XX',
+          required: v => !!v || 'Поле, обязательное для заполнения',
         },
+
+        clients: [
+          {
+            name: 'ФОП Пупкин',
+            egrpou: '1236547890',
+            address: 'м.Киев',
+            phone: '+38(050)777-77-77',
+            email: '1@2.3',
+          },
+          {
+            name: 'ФОП Гопкин',
+            egrpou: '2342525252',
+            address: 'м.Бровари',
+            phone: '+38(050)777-74-56',
+            email: '2@3.4',
+          },
+        ]
+
       }
     },
+
+    created() {
+    }
 }
 
 </script>

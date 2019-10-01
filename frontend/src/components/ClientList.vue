@@ -21,13 +21,25 @@
         show-select
         :search="search"
       >
+        <template slot="items"  slot-scope="props">
+          <tr>
+            <td class="text-xs-right">{{ props.item.name }} </td>
+            <td class="text-xs-right">{{ props.item.egrpou }} </td>
+            <td class="text-xs-right">{{ props.item.address }} </td>
+            <td class="text-xs-right">{{ props.item.phone }} </td>
+            <td class="text-xs-right">{{ props.item.email }} </td>
+          </tr>
+        </template>
 
       </v-data-table>
 
       <template>
         <v-btn text color="primary" @click="close()">Отмена</v-btn>
-        <v-btn text color="primary" @click="ret(item.name)">OK</v-btn>
+        <v-btn text color="primary" @click="ret(props.item.name)">OK</v-btn>
       </template>
+
+
+
     </v-card>
 
 </template>
@@ -96,7 +108,6 @@ export default {
 
     beforeMount () {
       this.initialize()
-      debugger
     },
 
     methods: {
@@ -104,6 +115,13 @@ export default {
             this.clients = [
                 {
                     name: 'ФОП Пупкин',
+                    egrpou: '1236547890',
+                    address: 'м.Киев',
+                    phone: '+380507777777',
+                    email: '1@2.3',
+                },
+                {
+                    name: 'ФОП Гопкин',
                     egrpou: '1236547890',
                     address: 'м.Киев',
                     phone: '+380507777777',
@@ -138,8 +156,7 @@ export default {
         ret (name) {
             this.$emit('ret', {name: name, dialog_client_list: false} );
             console.log('ret');
-            console.log(this.name);
-            console.log(this.dialog_client_list);
+
  //       if (this.editedIndex > -1) {
  //         Object.assign(this.clients[this.editedIndex], this.editedItem)
 //        } else {
