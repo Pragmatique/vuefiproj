@@ -9,7 +9,10 @@ import {
   SET_PROJECTSTATUSES,
   ADD_PROPERTYTYPE,
   REMOVE_PROPERTYTYPE,
-  SET_PROPERTYTYPES
+  SET_PROPERTYTYPES,
+  ADD_SERVICETYPE,
+  REMOVE_SERVICETYPE,
+  SET_SERVICETYPES
 } from './mutation-types.js'
 
 const TOKEN_STORAGE_KEY = 'TOKEN_STORAGE_KEY'
@@ -22,14 +25,28 @@ Vue.use(Vuex)
 const state = {
   projectstatuses: [],
   propertytypes: [],
+  servicetypes: [],
 }
 // Геттеры
 const getters = {
   projectstatuses: state => state.projectstatuses,
-  propertytypes: state => state.propertytypes
+  propertytypes: state => state.propertytypes,
+  servicetypes: state => state.servicetypes
 }
 // Мудации
 const mutations = {
+  [ADD_SERVICETYPE] (state, item) {
+    state.servicetypes = [item, ...state.servicetypes]
+  },
+  [REMOVE_SERVICETYPE] (state, id) {
+    state.servicetypes = state.servicetypes.filter(item => {
+      return item.id !== id
+    })
+  },
+  [SET_SERVICETYPES] (state, { servicetypes }) {
+    state.servicetypes = servicetypes
+  },
+
   [ADD_PROPERTYTYPE] (state, item) {
     state.propertytypes = [item, ...state.propertytypes]
   },
@@ -56,6 +73,31 @@ const mutations = {
 }
 // Действия
 const actions = {
+  async createServiceType ({ commit }, payload) {
+    try {
+      const serviceType = await Dictionary.createServiceType(payload)
+      commit(ADD_SERVICETYPE, serviceType)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async deleteServiceType ({ commit }, id) {
+    try {
+      await Dictionary.deleteServiceType(id)
+      commit(REMOVE_SERVICETYPE, id)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async getServiceTypes ({ commit }) {
+    try {
+      const servicetypes = await Dictionary.listServiceTypes()
+      commit(SET_SERVICETYPES, { servicetypes })
+    } catch (error) {
+      console.error(error)
+    }
+  },
+
   async createPropertyType ({ commit }, payload) {
     try {
       const propertyType = await Dictionary.createPropertyType(payload)

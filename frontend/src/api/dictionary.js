@@ -34,5 +34,22 @@ export const Dictionary = {
     })
   },
 
+  createServiceType (config) {
+    return HTTP.post('/dictionary/service-type/', config).then(response => {
+      return response.data
+    })
+  },
+  deleteServiceType (id) {
+    return HTTP.delete(`/dictionary/service-type/${id}/`)
+  },
+  getServiceType (id) {
+    return HTTP.get(`/dictionary/service-type/${id}/`)
+  },
+  listServiceTypes () {
+    return HTTP.get('/dictionary/service-type/').then(response => {
+      return response.data
+    })
+  },
+
 
 }
