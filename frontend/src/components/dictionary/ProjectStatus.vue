@@ -1,17 +1,40 @@
 <template>
   <div>
+    <v-snackbar
+      v-model="showResult"
+      :color= "snackbarColor"
+      :timeout="2000"
+      top>
+      {{ result }}
+    </v-snackbar>
     <v-container fluid>
       <v-card>
         <v-container fluid>
           <v-layout row align-center>
             <v-flex shrink xs4 offset-xs4>
-              <v-btn color="blue" @click="addItem">Добавить статус</v-btn>
               <v-dialog v-model="dialog" persistent max-width="600px">
                 <template slot="activator">
-                  <v-btn color="primary" dark >Open Dialog</v-btn>
+                  <v-btn color="blue" >Добавить статус</v-btn>
                 </template>
-                <client-list></client-list>
-
+                  <v-card>
+                    <v-card-title>
+                      <span class="headline">Статус</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container grid-list-md>
+                        <v-layout wrap>
+                          <v-flex xs12 sm12 md12>
+                            <v-text-field label="Введите новый статус" required v-model='new_satus'></v-text-field>
+                          </v-flex>
+                        </v-layout>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" flat @click.native="dialog = false">Закрыть</v-btn>
+                      <v-btn color="blue darken-1" flat @click.native="dialog = false" @click="addItem(new_satus)">Создать</v-btn>
+                    </v-card-actions>
+                  </v-card>
               </v-dialog>
             </v-flex>
           </v-layout>
@@ -29,7 +52,21 @@
             </v-card-title>
           </v-flex>
           <v-flex shrink xs2>
-            <v-btn color="red" @click="removeItem(item.id)">Удалить</v-btn>
+              <v-dialog v-model="dialogConfirm" persistent max-width="300px">
+                <template slot="activator">
+                  <v-btn color="red" >Удалить</v-btn>
+                </template>
+                  <v-card>
+                    <v-card-title>
+                      <span class="headline">Вы уверены, что хотите удалить статус?</span>
+                    </v-card-title>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="red darken-1" flat @click.native="dialogConfirm = false">Нет</v-btn>
+                      <v-btn color="blue darken-1" flat @click.native="dialogConfirm = false" @click="removeItem(projectstatus.id)">Да</v-btn>
+                    </v-card-actions>
+                  </v-card>
+              </v-dialog>
           </v-flex>
         </v-layout>
       </v-container>
@@ -43,13 +80,14 @@ import ClientList from '@/components/ClientList.vue';
 export default {
     data() {
       return {
-        items: [
-          { id: 'foo', title: 'Foo', content: 'Lorem ipsum' },
-          { id: 'bar', title: 'Bar', content: 'Dolor sed amit' },
-          { id: 'baz', title: 'Baz', content: 'Des talamat' }
-        ],
+        snackbarColor: 'error',
         dialog: false,
-        on: true
+        dialogConfirm: false,
+        on: true,
+        new_satus: '',
+        error: false,
+        showResult: false,
+        result: '',
       }
 
     },
@@ -57,11 +95,29 @@ export default {
       ...mapGetters('dictionary', ['projectstatuses'])
     },
     methods: {
-      removeItem (id) {
-        this.items = this.items.filter(item => item.id !== id)
+      async removeItem (id) {
+
+        await this.$store.dispatch('dictionary/deleteProjectStatus',
+          id,
+          {root:true}
+        );
+
+        //this.items = this.items.map(item => item.id !== id)
       },
-      addItem () {
-        console.log('Add item')
+      async addItem (new_satus) {
+
+        if (this.new_satus === '') {
+          this.error = true;
+          this.result = "Статус не может быть пустым";
+          this.showResult = true;
+          return;
+        } else {
+          await this.$store.dispatch('dictionary/createProjectStatus',
+            {status: this.new_satus},
+            {root:true}
+          );
+          this.new_satus='';
+        }
       }
     },
     beforeMount () {

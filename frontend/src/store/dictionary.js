@@ -28,10 +28,11 @@ const mutations = {
   [ADD_PROJECTSTATUS] (state, item) {
     state.projectstatuses = [item, ...state.projectstatuses]
   },
-  [REMOVE_PROJECTSTATUS] (state, { id }) {
+  [REMOVE_PROJECTSTATUS] (state, id) {
     state.projectstatuses = state.projectstatuses.filter(item => {
       return item.id !== id
     })
+    debugger
   },
   [SET_PROJECTSTATUSES] (state, { projectstatuses }) {
     state.projectstatuses = projectstatuses
