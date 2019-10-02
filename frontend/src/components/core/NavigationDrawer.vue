@@ -73,6 +73,12 @@
           </v-list-tile-action>
           <v-list-tile-title :class="[{'active': selectedIndex === 7}, 'item-title' ]">Состояния проекта</v-list-tile-title>
         </v-list-tile>
+        <v-list-tile @click="changeRoute('PropertyType', 11)">
+          <v-list-tile-action>
+            <v-icon>event_note</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title :class="[{'active': selectedIndex === 11}, 'item-title' ]">Тип собственности</v-list-tile-title>
+        </v-list-tile>
         <v-list-tile @click="changeRoute('ClientTable', 8)">
           <v-list-tile-action>
             <v-icon>event_note</v-icon>

@@ -6,7 +6,10 @@ import { HTTP } from '../api/common'
 import {
   ADD_PROJECTSTATUS,
   REMOVE_PROJECTSTATUS,
-  SET_PROJECTSTATUSES
+  SET_PROJECTSTATUSES,
+  ADD_PROPERTYTYPE,
+  REMOVE_PROPERTYTYPE,
+  SET_PROPERTYTYPES
 } from './mutation-types.js'
 
 const TOKEN_STORAGE_KEY = 'TOKEN_STORAGE_KEY'
@@ -17,14 +20,28 @@ Vue.use(Vuex)
 // Состояние
 
 const state = {
-  projectstatuses: []
+  projectstatuses: [],
+  propertytypes: [],
 }
 // Геттеры
 const getters = {
-  projectstatuses: state => state.projectstatuses
+  projectstatuses: state => state.projectstatuses,
+  propertytypes: state => state.propertytypes
 }
 // Мудации
 const mutations = {
+  [ADD_PROPERTYTYPE] (state, item) {
+    state.propertytypes = [item, ...state.propertytypes]
+  },
+  [REMOVE_PROPERTYTYPE] (state, id) {
+    state.propertytypes = state.propertytypes.filter(item => {
+      return item.id !== id
+    })
+  },
+  [SET_PROPERTYTYPES] (state, { propertytypes }) {
+    state.propertytypes = propertytypes
+  },
+
   [ADD_PROJECTSTATUS] (state, item) {
     state.projectstatuses = [item, ...state.projectstatuses]
   },
@@ -32,14 +49,38 @@ const mutations = {
     state.projectstatuses = state.projectstatuses.filter(item => {
       return item.id !== id
     })
-    debugger
   },
   [SET_PROJECTSTATUSES] (state, { projectstatuses }) {
     state.projectstatuses = projectstatuses
-  }
+  },
 }
 // Действия
 const actions = {
+  async createPropertyType ({ commit }, payload) {
+    try {
+      const propertyType = await Dictionary.createPropertyType(payload)
+      commit(ADD_PROPERTYTYPE, propertyType)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async deletePropertyType ({ commit }, id) {
+    try {
+      await Dictionary.deletePropertyType(id)
+      commit(REMOVE_PROPERTYTYPE, id)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async getPropertyTypes ({ commit }) {
+    try {
+      const propertytypes = await Dictionary.listPropertyTypes()
+      commit(SET_PROPERTYTYPES, { propertytypes })
+    } catch (error) {
+      console.error(error)
+    }
+  },
+
   async createProjectStatus ({ commit }, payload) {
     try {
       const projectStatus = await Dictionary.createProjectStatus(payload)
@@ -48,10 +89,10 @@ const actions = {
       console.error(error)
     }
   },
-  async deleteProjectStatus ({ commit }, statusid) {
+  async deleteProjectStatus ({ commit }, id) {
     try {
-      await Dictionary.deleteProjectStatus(statusid)
-      commit(REMOVE_PROJECTSTATUS, statusid)
+      await Dictionary.deleteProjectStatus(id)
+      commit(REMOVE_PROJECTSTATUS, id)
     } catch (error) {
       console.error(error)
     }
@@ -63,7 +104,7 @@ const actions = {
     } catch (error) {
       console.error(error)
     }
-  }
+  },
 }
 
 export const dictionary = {

@@ -23,6 +23,8 @@ import ProjectObject from '../components/project/tabs/ProjectObject.vue';
 import ProjectPayment from '../components/project/tabs/ProjectPayment.vue';
 
 import ProjectStatus from '../components/dictionary/ProjectStatus.vue';
+import PropertyType from '../components/dictionary/PropertyType.vue';
+
 
 
 
@@ -147,6 +149,17 @@ export default new Router({
         breadcrumb: [
           { name: 'Dashboard', href: 'Dashboard' },
           { name: 'ProjectStatus' }
+        ]
+      }
+    },
+    {
+      path: '/property-type',
+      name: 'PropertyType',
+      component: PropertyType,
+      meta: {
+        breadcrumb: [
+          { name: 'Dashboard', href: 'Dashboard' },
+          { name: 'PropertyType' }
         ]
       }
     },
