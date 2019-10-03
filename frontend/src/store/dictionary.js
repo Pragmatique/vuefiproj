@@ -12,7 +12,10 @@ import {
   SET_PROPERTYTYPES,
   ADD_SERVICETYPE,
   REMOVE_SERVICETYPE,
-  SET_SERVICETYPES
+  SET_SERVICETYPES,
+  ADD_OBJECTTYPE,
+  REMOVE_OBJECTTYPE,
+  SET_OBJECTTYPES
 } from './mutation-types.js'
 
 const TOKEN_STORAGE_KEY = 'TOKEN_STORAGE_KEY'
@@ -26,15 +29,29 @@ const state = {
   projectstatuses: [],
   propertytypes: [],
   servicetypes: [],
+  objecttypes: [],
 }
 // Геттеры
 const getters = {
   projectstatuses: state => state.projectstatuses,
   propertytypes: state => state.propertytypes,
-  servicetypes: state => state.servicetypes
+  servicetypes: state => state.servicetypes,
+  objecttypes: state => state.objecttypes,
 }
 // Мудации
 const mutations = {
+  [ADD_OBJECTTYPE] (state, item) {
+    state.objecttypes = [item, ...state.objecttypes]
+  },
+  [REMOVE_OBJECTTYPE] (state, id) {
+    state.objecttypes = state.objecttypes.filter(item => {
+      return item.id !== id
+    })
+  },
+  [SET_OBJECTTYPES] (state, { servicetypes }) {
+    state.objecttypes = objecttypes
+  },
+
   [ADD_SERVICETYPE] (state, item) {
     state.servicetypes = [item, ...state.servicetypes]
   },
@@ -73,6 +90,31 @@ const mutations = {
 }
 // Действия
 const actions = {
+  async createObjectType ({ commit }, payload) {
+    try {
+      const objectType = await Dictionary.createObjectType(payload)
+      commit(ADD_OBJECTTYPE, objectType)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async deleteObjectType ({ commit }, id) {
+    try {
+      await Dictionary.deleteObjectType(id)
+      commit(REMOVE_OBJECTTYPE, id)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async getServiceTypes ({ commit }) {
+    try {
+      const objecttypes = await Dictionary.listObjectTypes()
+      commit(SET_OBJECTTYPES, { objecttypes })
+    } catch (error) {
+      console.error(error)
+    }
+  },
+
   async createServiceType ({ commit }, payload) {
     try {
       const serviceType = await Dictionary.createServiceType(payload)

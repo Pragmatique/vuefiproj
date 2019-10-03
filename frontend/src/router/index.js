@@ -25,6 +25,7 @@ import ProjectPayment from '../components/project/tabs/ProjectPayment.vue';
 import ProjectStatus from '../components/dictionary/ProjectStatus.vue';
 import PropertyType from '../components/dictionary/PropertyType.vue';
 import ServiceType from '../components/dictionary/ServiceType.vue';
+import ObjectType from '../components/dictionary/ObjectType.vue';
 
 
 
@@ -171,6 +172,17 @@ export default new Router({
         breadcrumb: [
           { name: 'Dashboard', href: 'Dashboard' },
           { name: 'ServiceType' }
+        ]
+      }
+    },
+    {
+      path: '/object-type',
+      name: 'ObjectType',
+      component: ObjectType,
+      meta: {
+        breadcrumb: [
+          { name: 'Dashboard', href: 'Dashboard' },
+          { name: 'ObjectType' }
         ]
       }
     },

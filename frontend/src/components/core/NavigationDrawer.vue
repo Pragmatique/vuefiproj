@@ -85,6 +85,12 @@
           </v-list-tile-action>
           <v-list-tile-title :class="[{'active': selectedIndex === 12}, 'item-title' ]">Тип услуг</v-list-tile-title>
         </v-list-tile>
+        <v-list-tile @click="changeRoute('ObjectType', 13)">
+          <v-list-tile-action>
+            <v-icon>event_note</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title :class="[{'active': selectedIndex === 13}, 'item-title' ]">Тип объекта</v-list-tile-title>
+        </v-list-tile>
         <v-list-tile @click="changeRoute('ClientTable', 8)">
           <v-list-tile-action>
             <v-icon>event_note</v-icon>

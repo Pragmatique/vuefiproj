@@ -51,5 +51,22 @@ export const Dictionary = {
     })
   },
 
+  createObjectType (config) {
+    return HTTP.post('/dictionary/object-type/', config).then(response => {
+      return response.data
+    })
+  },
+  deleteObjectType (id) {
+    return HTTP.delete(`/dictionary/object-type/${id}/`)
+  },
+  getObjectType (id) {
+    return HTTP.get(`/dictionary/object-type/${id}/`)
+  },
+  listObjectTypes () {
+    return HTTP.get('/dictionary/object-type/').then(response => {
+      return response.data
+    })
+  },
+
 
 }
