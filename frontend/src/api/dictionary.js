@@ -68,5 +68,39 @@ export const Dictionary = {
     })
   },
 
+  createPaymentType (config) {
+    return HTTP.post('/dictionary/payment-type/', config).then(response => {
+      return response.data
+    })
+  },
+  deletePaymentType (id) {
+    return HTTP.delete(`/dictionary/payment-type/${id}/`)
+  },
+  getPaymentType (id) {
+    return HTTP.get(`/dictionary/payment-type/${id}/`)
+  },
+  listPaymentTypes () {
+    return HTTP.get('/dictionary/payment-type/').then(response => {
+      return response.data
+    })
+  },
+
+  createMainContractor (config) {
+    return HTTP.post('/dictionary/main-contractors/', config).then(response => {
+      return response.data
+    })
+  },
+  deleteMainContractor (id) {
+    return HTTP.delete(`/dictionary/main-contractors/${id}/`)
+  },
+  getMainContractor (id) {
+    return HTTP.get(`/dictionary/main-contractors/${id}/`)
+  },
+  listMainContractor () {
+    return HTTP.get('/dictionary/main-contractors/').then(response => {
+      return response.data
+    })
+  },
+
 
 }

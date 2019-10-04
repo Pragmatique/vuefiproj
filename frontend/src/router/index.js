@@ -26,7 +26,8 @@ import ProjectStatus from '../components/dictionary/ProjectStatus.vue';
 import PropertyType from '../components/dictionary/PropertyType.vue';
 import ServiceType from '../components/dictionary/ServiceType.vue';
 import ObjectType from '../components/dictionary/ObjectType.vue';
-
+import PaymentType from '../components/dictionary/PaymentType.vue';
+import MainContractors from '../components/dictionary/MainContractors.vue';
 
 
 Vue.use(Router);
@@ -183,6 +184,28 @@ export default new Router({
         breadcrumb: [
           { name: 'Dashboard', href: 'Dashboard' },
           { name: 'ObjectType' }
+        ]
+      }
+    },
+    {
+      path: '/payment-type',
+      name: 'PaymentType',
+      component: PaymentType,
+      meta: {
+        breadcrumb: [
+          { name: 'Dashboard', href: 'Dashboard' },
+          { name: 'PaymentType' }
+        ]
+      }
+    },
+    {
+      path: '/main-contractors',
+      name: 'MainContractors',
+      component: MainContractors,
+      meta: {
+        breadcrumb: [
+          { name: 'Dashboard', href: 'Dashboard' },
+          { name: 'MainContractors' }
         ]
       }
     },

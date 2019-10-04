@@ -15,7 +15,13 @@ import {
   SET_SERVICETYPES,
   ADD_OBJECTTYPE,
   REMOVE_OBJECTTYPE,
-  SET_OBJECTTYPES
+  SET_OBJECTTYPES,
+  ADD_PAYMENTTYPE,
+  REMOVE_PAYMENTTYPE,
+  SET_PAYMENTTYPES,
+  ADD_MAINCONTRACTOR,
+  REMOVE_MAINCONTRACTOR,
+  SET_MAINCONTRACTOR,
 } from './mutation-types.js'
 
 const TOKEN_STORAGE_KEY = 'TOKEN_STORAGE_KEY'
@@ -30,6 +36,8 @@ const state = {
   propertytypes: [],
   servicetypes: [],
   objecttypes: [],
+  paymenttypes: [],
+  maincontractors: [],
 }
 // Геттеры
 const getters = {
@@ -37,9 +45,35 @@ const getters = {
   propertytypes: state => state.propertytypes,
   servicetypes: state => state.servicetypes,
   objecttypes: state => state.objecttypes,
+  paymenttypes: state => state.paymenttypes,
+  maincontractors: state => state.maincontractors,
 }
 // Мудации
 const mutations = {
+  [ADD_MAINCONTRACTOR] (state, item) {
+    state.maincontractors = [item, ...state.maincontractors]
+  },
+  [REMOVE_MAINCONTRACTOR] (state, id) {
+    state.maincontractors = state.maincontractors.filter(item => {
+      return item.id !== id
+    })
+  },
+  [SET_MAINCONTRACTOR] (state, { maincontractors }) {
+    state.maincontractors = maincontractors
+  },
+
+  [ADD_PAYMENTTYPE] (state, item) {
+    state.paymenttypes = [item, ...state.paymenttypes]
+  },
+  [REMOVE_PAYMENTTYPE] (state, id) {
+    state.paymenttypes = state.paymenttypes.filter(item => {
+      return item.id !== id
+    })
+  },
+  [SET_PAYMENTTYPES] (state, { paymenttypes }) {
+    state.paymenttypes = paymenttypes
+  },
+
   [ADD_OBJECTTYPE] (state, item) {
     state.objecttypes = [item, ...state.objecttypes]
   },
@@ -48,7 +82,7 @@ const mutations = {
       return item.id !== id
     })
   },
-  [SET_OBJECTTYPES] (state, { servicetypes }) {
+  [SET_OBJECTTYPES] (state, { objecttypes }) {
     state.objecttypes = objecttypes
   },
 
@@ -90,6 +124,56 @@ const mutations = {
 }
 // Действия
 const actions = {
+  async createMainContractor ({ commit }, payload) {
+    try {
+      const mainContractor = await Dictionary.createMainContractor(payload)
+      commit(ADD_MAINCONTRACTOR, mainContractor)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async deleteMainContractor ({ commit }, id) {
+    try {
+      await Dictionary.deleteMainContractor(id)
+      commit(REMOVE_MAINCONTRACTOR, id)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async getMainContractor ({ commit }) {
+    try {
+      const maincontractors = await Dictionary.listMainContractor()
+      commit(SET_MAINCONTRACTOR, { maincontractors })
+    } catch (error) {
+      console.error(error)
+    }
+  },
+
+  async createPaymentType ({ commit }, payload) {
+    try {
+      const paymentType = await Dictionary.createPaymentType(payload)
+      commit(ADD_PAYMENTTYPE, paymentType)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async deletePaymentType ({ commit }, id) {
+    try {
+      await Dictionary.deletePaymentType(id)
+      commit(REMOVE_PAYMENTTYPE, id)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async getPaymentTypes ({ commit }) {
+    try {
+      const paymenttypes = await Dictionary.listPaymentTypes()
+      commit(SET_PAYMENTTYPES, { paymenttypes })
+    } catch (error) {
+      console.error(error)
+    }
+  },
+
   async createObjectType ({ commit }, payload) {
     try {
       const objectType = await Dictionary.createObjectType(payload)
@@ -106,7 +190,7 @@ const actions = {
       console.error(error)
     }
   },
-  async getServiceTypes ({ commit }) {
+  async getObjectTypes ({ commit }) {
     try {
       const objecttypes = await Dictionary.listObjectTypes()
       commit(SET_OBJECTTYPES, { objecttypes })
