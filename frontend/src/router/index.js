@@ -28,6 +28,8 @@ import ServiceType from '../components/dictionary/ServiceType.vue';
 import ObjectType from '../components/dictionary/ObjectType.vue';
 import PaymentType from '../components/dictionary/PaymentType.vue';
 import MainContractors from '../components/dictionary/MainContractors.vue';
+import ClientType from '../components/dictionary/ClientType.vue';
+
 
 
 Vue.use(Router);
@@ -206,6 +208,17 @@ export default new Router({
         breadcrumb: [
           { name: 'Dashboard', href: 'Dashboard' },
           { name: 'MainContractors' }
+        ]
+      }
+    },
+    {
+      path: '/client-type',
+      name: 'ClientType',
+      component: ClientType,
+      meta: {
+        breadcrumb: [
+          { name: 'Dashboard', href: 'Dashboard' },
+          { name: 'ClientType' }
         ]
       }
     },

@@ -101,6 +101,23 @@ export const Dictionary = {
       return response.data
     })
   },
+  
+  createClientType (config) {
+    return HTTP.post('/dictionary/client-type/', config).then(response => {
+      return response.data
+    })
+  },
+  deleteClientType (id) {
+    return HTTP.delete(`/dictionary/client-type/${id}/`)
+  },
+  getClientType (id) {
+    return HTTP.get(`/dictionary/client-type/${id}/`)
+  },
+  listClientTypes () {
+    return HTTP.get('/dictionary/client-type/').then(response => {
+      return response.data
+    })
+  },
 
 
 }

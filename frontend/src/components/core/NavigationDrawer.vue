@@ -91,17 +91,23 @@
           </v-list-tile-action>
           <v-list-tile-title :class="[{'active': selectedIndex === 13}, 'item-title' ]">Тип объекта</v-list-tile-title>
         </v-list-tile>
-         <v-list-tile @click="changeRoute('PaymentType', 14)">
+        <v-list-tile @click="changeRoute('PaymentType', 14)">
           <v-list-tile-action>
             <v-icon>event_note</v-icon>
           </v-list-tile-action>
           <v-list-tile-title :class="[{'active': selectedIndex === 14}, 'item-title' ]">Тип оплаты</v-list-tile-title>
         </v-list-tile>
-         <v-list-tile @click="changeRoute('MainContractors', 15)">
+        <v-list-tile @click="changeRoute('MainContractors', 15)">
           <v-list-tile-action>
             <v-icon>event_note</v-icon>
           </v-list-tile-action>
           <v-list-tile-title :class="[{'active': selectedIndex === 15}, 'item-title' ]">Основные партнеры</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile @click="changeRoute('ClientType', 16)">
+          <v-list-tile-action>
+            <v-icon>event_note</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title :class="[{'active': selectedIndex === 16}, 'item-title' ]">Тип клиента</v-list-tile-title>
         </v-list-tile>
         <v-list-tile @click="changeRoute('ClientTable', 8)">
           <v-list-tile-action>

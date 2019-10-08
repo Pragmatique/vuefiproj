@@ -22,6 +22,9 @@ import {
   ADD_MAINCONTRACTOR,
   REMOVE_MAINCONTRACTOR,
   SET_MAINCONTRACTOR,
+  ADD_CLIENTTYPE,
+  REMOVE_CLIENTTYPE,
+  SET_CLIENTTYPES,
 } from './mutation-types.js'
 
 const TOKEN_STORAGE_KEY = 'TOKEN_STORAGE_KEY'
@@ -38,6 +41,7 @@ const state = {
   objecttypes: [],
   paymenttypes: [],
   maincontractors: [],
+  clienttypes: [],
 }
 // Геттеры
 const getters = {
@@ -47,9 +51,22 @@ const getters = {
   objecttypes: state => state.objecttypes,
   paymenttypes: state => state.paymenttypes,
   maincontractors: state => state.maincontractors,
+  clienttypes: state => state.clienttypes,
 }
 // Мудации
 const mutations = {
+  [ADD_CLIENTTYPE] (state, item) {
+    state.clienttypes = [item, ...state.clienttypes]
+  },
+  [REMOVE_CLIENTTYPE] (state, id) {
+    state.clienttypes = state.clienttypes.filter(item => {
+      return item.id !== id
+    })
+  },
+  [SET_CLIENTTYPES] (state, { clienttypes }) {
+    state.clienttypes = clienttypes
+  },
+  
   [ADD_MAINCONTRACTOR] (state, item) {
     state.maincontractors = [item, ...state.maincontractors]
   },
@@ -124,6 +141,31 @@ const mutations = {
 }
 // Действия
 const actions = {
+  async createClientType ({ commit }, payload) {
+    try {
+      const clientType = await Dictionary.createClientType(payload)
+      commit(ADD_CLIENTTYPE, clientType)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async deleteClientType ({ commit }, id) {
+    try {
+      await Dictionary.deleteClientType(id)
+      commit(REMOVE_CLIENTTYPE, id)
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  async getClientTypes ({ commit }) {
+    try {
+      const clienttypes = await Dictionary.listClientTypes()
+      commit(SET_CLIENTTYPES, { clienttypes })
+    } catch (error) {
+      console.error(error)
+    }
+  },
+    
   async createMainContractor ({ commit }, payload) {
     try {
       const mainContractor = await Dictionary.createMainContractor(payload)

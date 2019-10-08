@@ -56,7 +56,7 @@ const state = {
 }
 // Геттеры
 const getters = {
-  users: state => state.users, // получаем список заметок из состояния
+  users: state => state.users, // получаем список пользователей из состояния
   isAuthenticated: state => !!state.token,
   themeColor: state => state.themeColor,
   userFull: state=>state.userFull
