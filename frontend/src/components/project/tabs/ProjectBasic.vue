@@ -150,8 +150,8 @@ export default {
         }),
 
         beforeMount() {
-          this.$store.dispatch('dictionary/getProjectStatuses',null,{root:true})
-          this.$store.dispatch('authuser/getUsers',null,{root:true})
+          if (this.projectstatuses.length < 1) { this.$store.dispatch('dictionary/getProjectStatuses',null,{root:true}) }
+          if (this.users.length < 1) { this.$store.dispatch('authuser/getUsers',null,{root:true}) }
         }
 }
 

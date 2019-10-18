@@ -4,9 +4,11 @@
             <v-flex md3>
               <v-select
                 v-model="client_type"
-                :items="client_type_items"
+                :items="clienttypes"
                 :color="$root.themeColor"
                 filled
+                item-text="type"
+                item-value="item"
                 label="Тип клиента"
                 outlined
               ></v-select>              
@@ -26,6 +28,7 @@
                 label="Клиент"
                 placeholder="Выберите клиента"
                 prepend-icon="mdi-database-search"
+                style="min-height: 96px"
                 return-object
               ></v-autocomplete>
             </v-flex>
@@ -93,9 +96,108 @@
                 clearable
                 clearable-icon
                 :color="$root.themeColor"
-                label="Фактический адрес"
+                label="Город"
                 style="min-height: 96px"
               ></v-text-field>            
+            </v-flex>
+          </v-layout>
+
+          <v-layout row justify-space-between>
+            <v-flex md3>
+              <v-text-field
+                v-model="model.phone"
+                :rules="[rules.required]"
+                clearable
+                clearable-icon
+                filled
+                :color="$root.themeColor"
+                label="Улица"
+                style="min-height: 96px"
+              ></v-text-field>
+            </v-flex>
+
+            <v-flex md3>
+              <v-text-field
+                v-model="model.email"
+                :rules="[rules.required]"
+                filled
+                clearable
+                clearable-icon
+                :color="$root.themeColor"
+                label="Номер дома"
+                style="min-height: 96px"
+              ></v-text-field>
+            </v-flex>
+
+            <v-flex md3>
+              <v-text-field
+                v-model="model.address"
+
+                filled
+                clearable
+                clearable-icon
+                :color="$root.themeColor"
+                label="Номер квартиры"
+                style="min-height: 96px"
+              ></v-text-field>
+            </v-flex>
+          </v-layout>
+
+          <v-layout row justify-space-between>
+            <v-flex md3>
+              <v-text-field
+                v-model="model.phone"
+                :rules="[rules.required]"
+                clearable
+                clearable-icon
+                filled
+                :color="$root.themeColor"
+                label="Канал захода"
+                style="min-height: 96px"
+              ></v-text-field>
+            </v-flex>
+
+            <v-flex md3>
+              <v-text-field
+                v-model="model.email"
+                :rules="[rules.required]"
+                filled
+                clearable
+                clearable-icon
+                :color="$root.themeColor"
+                label="Реферальная программа"
+                style="min-height: 96px"
+              ></v-text-field>
+            </v-flex>
+
+          </v-layout>
+
+          <v-layout row justify-space-between>
+            <v-flex md3>
+              <v-checkbox
+                v-model="animal"
+                label="Сетевой клиент 5+"
+              ></v-checkbox>
+            </v-flex>
+
+            <v-flex md3>
+              <v-checkbox
+                v-model="animal"
+                label="Сетевой клиент 20+"
+              ></v-checkbox>
+            </v-flex>
+
+            <v-flex md3>
+              <v-text-field
+                v-model="model.address"
+
+                filled
+                clearable
+                clearable-icon
+                :color="$root.themeColor"
+                label="Баланс 1С"
+                style="min-height: 96px"
+              ></v-text-field>
             </v-flex>
           </v-layout>
 
@@ -129,8 +231,7 @@
 
 <script>
 
-import ClientList from '@/components/ClientList.vue'
-
+import { mapGetters } from 'vuex';
 
 export default {
 
@@ -141,7 +242,7 @@ export default {
     methods: {
       clear_client() {
         const vm = this;
-        vm.client_type= vm.client_type_items[0];
+        vm.client_type= null;
         vm.client_name= null;
         vm.egrpou= null;
         vm.contact= null;
@@ -163,6 +264,8 @@ export default {
     },
 
     computed: {
+      ...mapGetters('dictionary', ['clienttypes']),
+      ...mapGetters('authuser', ['users']),
       fields () {
         if (!this.model) return []
 
@@ -204,7 +307,7 @@ export default {
 
     data() {
       return {
-        client_type: 'Не определен',
+        client_type: null,
         client_type_items: ['Не определен', 'Юридическое лицо', 'Физическое лицо', 'Частный предприниматель'],
         client_name: null,
         egrpou: null,
@@ -256,7 +359,9 @@ export default {
       }
     },
 
-    created() {
+    beforeMount() {
+      if (this.clienttypes.length < 1) { this.$store.dispatch('dictionary/getClientTypes',null,{root:true}) }
+      if (this.users.length < 1) { this.$store.dispatch('authuser/getUsers',null,{root:true}) }
     }
 }
 
